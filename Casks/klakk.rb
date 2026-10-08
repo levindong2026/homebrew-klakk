@@ -11,7 +11,7 @@ cask "klakk" do
     skip "Updated by Klakk after the published installer has been verified"
   end
 
-  depends_on macos: ">= :sonoma"
+  depends_on macos: :sonoma
 
   app "Klakk.app"
 
