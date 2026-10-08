@@ -14,6 +14,8 @@ If you already use Homebrew:
 brew install --cask levindong2026/klakk/klakk
 ```
 
+Use the full tap name for Klakk at tryklakk.com. [Klack at tryklack.com](https://tryklack.com/) is a different application.
+
 Requirements: macOS 14 or later, Apple silicon or Intel. The cask downloads the official Klakk 1.4.1 build 23 DMG and installs its signed, notarized app. It verifies SHA-256 before installation. The app then requests Input Monitoring when you open it; review the [privacy policy](https://tryklakk.com/en/privacy/) before granting permission.
 
 The full-featured trial lasts 3 days. Continued use costs US$4.49 once for the Mac edition, with applicable taxes at checkout. Windows and the Mac App Store are separate purchase channels. This tap downloads the Mac website edition.
