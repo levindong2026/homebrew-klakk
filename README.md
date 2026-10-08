@@ -6,6 +6,8 @@ Publisher-maintained installation metadata for [Klakk](https://tryklakk.com/en/)
 
 The cask passed [installation validation on Apple silicon and Intel Macs](https://github.com/levindong2026/homebrew-klakk/actions/runs/37712787486). If you prefer a browser download, use the [official download page](https://tryklakk.com/en/download/?utm_source=github&utm_medium=referral&utm_campaign=homebrew_tap).
 
+The [Mac installation guide](https://tryklakk.com/en/blog/mac-direct-download-install-guide/?utm_source=github&utm_medium=referral&utm_campaign=homebrew_tap&utm_content=installation_guide) explains the DMG, Homebrew and Mac App Store routes, Input Monitoring and the first sound checks.
+
 If you already use Homebrew:
 
 ```sh
