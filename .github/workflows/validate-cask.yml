@@ -41,7 +41,7 @@ jobs:
           test "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' "$task_app/Contents/Info.plist")" = '23'
           test "$(/usr/libexec/PlistBuddy -c 'Print :LSMinimumSystemVersion' "$task_app/Contents/Info.plist")" = '14.0'
           task_executable="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' "$task_app/Contents/Info.plist")"
-          lipo -verify_arch x86_64 arm64 "$task_app/Contents/MacOS/$task_executable"
+          lipo "$task_app/Contents/MacOS/$task_executable" -verify_arch x86_64 arm64
           codesign --verify --deep --strict --verbose=2 "$task_app"
           xcrun stapler validate "$task_app"
           spctl --assess --type execute --verbose=2 "$task_app"
