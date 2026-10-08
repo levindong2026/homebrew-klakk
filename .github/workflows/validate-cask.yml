@@ -1,0 +1,51 @@
+name: Validate official Mac installer through Homebrew
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  install:
+    name: Homebrew on ${{ matrix.architecture }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: macos-26
+            architecture: arm64
+          - runner: macos-15-intel
+            architecture: x86_64
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 15
+    env:
+      HOMEBREW_NO_AUTO_UPDATE: 1
+      EXPECTED_ARCHITECTURE: ${{ matrix.architecture }}
+    steps:
+      - name: Install and inspect the official notarized app
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(uname -m)" = "$EXPECTED_ARCHITECTURE"
+          brew --version
+          brew tap levindong2026/klakk
+          task_tap_root="$(brew --repository levindong2026/klakk)"
+          test "$(git -C "$task_tap_root" rev-parse HEAD)" = "$GITHUB_SHA"
+          ruby -c "$task_tap_root/Casks/klakk.rb"
+          brew style "$task_tap_root/Casks/klakk.rb"
+          task_app_dir="$RUNNER_TEMP/klakk-homebrew-apps"
+          mkdir -p "$task_app_dir"
+          brew install --cask levindong2026/klakk/klakk --appdir="$task_app_dir"
+          task_app="$task_app_dir/Klakk.app"
+          test -d "$task_app"
+          test "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$task_app/Contents/Info.plist")" = 'com.tingnova.klakkdirect'
+          test "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$task_app/Contents/Info.plist")" = '1.4.1'
+          test "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' "$task_app/Contents/Info.plist")" = '23'
+          test "$(/usr/libexec/PlistBuddy -c 'Print :LSMinimumSystemVersion' "$task_app/Contents/Info.plist")" = '14.0'
+          task_executable="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' "$task_app/Contents/Info.plist")"
+          lipo -verify_arch x86_64 arm64 "$task_app/Contents/MacOS/$task_executable"
+          codesign --verify --deep --strict --verbose=2 "$task_app"
+          xcrun stapler validate "$task_app"
+          spctl --assess --type execute --verbose=2 "$task_app"
+          brew uninstall --cask levindong2026/klakk/klakk
+          test ! -d "$task_app"
+          echo "Homebrew install, bundle metadata, universal architecture, signature, notarization and uninstall passed on $EXPECTED_ARCHITECTURE."
+          echo 'The application was not launched. No keyboard permission was granted or security protection disabled. These are QA downloads/installations, not customer growth.'
