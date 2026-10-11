@@ -8,7 +8,22 @@ cask "klakk" do
   homepage "https://tryklakk.com/en/"
 
   livecheck do
-    skip "Updated by Klakk after the published installer has been verified"
+    url "https://github.com/levindong2026/klakk-downloads"
+    regex(/^Klakk-(\d+(?:\.\d+)+)-(\d+)\.dmg$/i)
+    strategy :github_releases do |json, regex|
+      json.flat_map do |release|
+        next [] if release["draft"] || release["prerelease"]
+
+        release.fetch("assets", []).filter_map do |asset|
+          next unless asset["state"] == "uploaded"
+
+          match = asset["name"]&.match(regex)
+          next unless match
+
+          "#{match[1]},#{match[2]}"
+        end
+      end
+    end
   end
 
   depends_on macos: :sonoma

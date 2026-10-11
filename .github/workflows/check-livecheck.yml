@@ -1,0 +1,40 @@
+name: Check Mac website release metadata
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - Casks/klakk.rb
+      - .github/workflows/check-livecheck.yml
+      - .github/scripts/check-release-filter.rb
+permissions:
+  contents: read
+jobs:
+  livecheck:
+    runs-on: macos-26
+    timeout-minutes: 10
+    env:
+      HOMEBREW_NO_AUTO_UPDATE: 1
+      HOMEBREW_NO_ANALYTICS: 1
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check the candidate cask without installing the application
+        shell: bash
+        run: |
+          set -euo pipefail
+          brew --version
+          ruby -c Casks/klakk.rb
+          brew style Casks/klakk.rb
+          brew ruby .github/scripts/check-release-filter.rb
+          brew tap levindong2026/klakk
+          task_tap_root="$(brew --repository levindong2026/klakk)"
+          cp Casks/klakk.rb "$task_tap_root/Casks/klakk.rb"
+          cmp Casks/klakk.rb "$task_tap_root/Casks/klakk.rb"
+          brew livecheck --cask levindong2026/klakk/klakk --json > "$RUNNER_TEMP/klakk-livecheck.json"
+          cat "$RUNNER_TEMP/klakk-livecheck.json"
+          ruby -rjson -e '
+            report = JSON.parse(File.read(ARGV.fetch(0))).fetch(0)
+            abort "Release metadata unavailable" if report["status"] == "error" || report["version"].nil?
+            version = report.fetch("version")
+            abort "Unexpected pinned cask version" unless version["current"] == "1.4.1,23"
+            abort "Unexpected current Mac release" unless version["latest"] == "1.4.1,23"
+          ' "$RUNNER_TEMP/klakk-livecheck.json"
