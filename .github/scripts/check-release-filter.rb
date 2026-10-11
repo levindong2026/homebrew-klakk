@@ -19,6 +19,12 @@ end
 class CaskCapture
   attr_reader :release_check
 
+  def version(value = nil)
+    @version = value if value
+    parts = Struct.new(:first, :second).new(*@version.split(","))
+    Struct.new(:csv).new(parts)
+  end
+
   def livecheck(&block)
     @release_check = ReleaseCheckCapture.new
     @release_check.instance_eval(&block)
