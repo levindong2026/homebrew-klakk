@@ -29,8 +29,12 @@ jobs:
           task_tap_root="$(brew --repository levindong2026/klakk)"
           cp Casks/klakk.rb "$task_tap_root/Casks/klakk.rb"
           cmp Casks/klakk.rb "$task_tap_root/Casks/klakk.rb"
-          brew livecheck --cask levindong2026/klakk/klakk --json > "$RUNNER_TEMP/klakk-livecheck.json"
+          task_livecheck_status=0
+          brew livecheck --cask levindong2026/klakk/klakk --json > "$RUNNER_TEMP/klakk-livecheck.json" || task_livecheck_status=$?
           cat "$RUNNER_TEMP/klakk-livecheck.json"
+          if [ "$task_livecheck_status" -ne 0 ]; then
+            exit "$task_livecheck_status"
+          fi
           ruby -rjson -e '
             report = JSON.parse(File.read(ARGV.fetch(0))).fetch(0)
             abort "Release metadata unavailable" if report["status"] == "error" || report["version"].nil?
