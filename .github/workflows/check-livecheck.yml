@@ -19,6 +19,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Check the candidate cask without installing the application
         shell: bash
+        env:
+          HOMEBREW_GITHUB_API_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           brew --version
