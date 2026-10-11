@@ -26,6 +26,14 @@ The public checks ran on an Apple silicon Mac with macOS 26 and an Intel Mac wit
 
 Updates are made only after the publisher's versioned installer and checksum have been verified. The cask does not disable Gatekeeper, alter Input Monitoring permissions, launch the app or accept product agreements for you.
 
+To check the Mac website release metadata:
+
+```sh
+brew livecheck --cask levindong2026/klakk/klakk
+```
+
+The check reads the publisher's recent GitHub releases and matches uploaded Mac DMG names, including the build number. It excludes draft and prerelease entries, Windows installers and the separately versioned Mac App Store edition. A missing match or failed request is unavailable update information. This check does not install an app or automatically change the cask version or checksum.
+
 To remove a Homebrew installation:
 
 ```sh
