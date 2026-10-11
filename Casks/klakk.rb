@@ -15,7 +15,7 @@ cask "klakk" do
         next [] if release["draft"] || release["prerelease"]
 
         release.fetch("assets", []).filter_map do |asset|
-          next unless asset["state"] == "uploaded"
+          next if asset["state"] != "uploaded"
 
           match = asset["name"]&.match(regex)
           next unless match

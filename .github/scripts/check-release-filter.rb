@@ -1,5 +1,3 @@
-require "json"
-
 # Exercise the actual cask strategy block without installing its app artifact.
 class ReleaseCheckCapture
   attr_reader :matcher
