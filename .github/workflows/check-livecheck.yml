@@ -32,6 +32,7 @@ jobs:
           task_tap_root="$(brew --repository levindong2026/klakk)"
           cp Casks/klakk.rb "$task_tap_root/Casks/klakk.rb"
           cmp Casks/klakk.rb "$task_tap_root/Casks/klakk.rb"
+          brew trust --cask levindong2026/klakk/klakk
           brew ruby .github/scripts/check-upgrade-metadata.rb "$task_tap_root/Casks/klakk.rb"
           task_livecheck_status=0
           brew livecheck --cask levindong2026/klakk/klakk --json > "$RUNNER_TEMP/klakk-livecheck.json" || task_livecheck_status=$?
