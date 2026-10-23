@@ -6,6 +6,7 @@ on:
       - Casks/klakk.rb
       - .github/workflows/check-livecheck.yml
       - .github/scripts/check-release-filter.rb
+      - .github/scripts/check-upgrade-metadata.rb
 permissions:
   contents: read
 jobs:
@@ -27,6 +28,7 @@ jobs:
           ruby -c Casks/klakk.rb
           brew style Casks/klakk.rb
           brew ruby .github/scripts/check-release-filter.rb
+          brew ruby .github/scripts/check-upgrade-metadata.rb
           brew tap levindong2026/klakk
           task_tap_root="$(brew --repository levindong2026/klakk)"
           cp Casks/klakk.rb "$task_tap_root/Casks/klakk.rb"
@@ -44,5 +46,5 @@ jobs:
             pinned = File.read("Casks/klakk.rb").match(/^\s+version "([^"]+)"$/).captures.first
             abort "Unexpected pinned cask version" unless version["current"] == pinned
             latest = version["latest"]
-            abort "Mac version/build metadata unavailable" unless latest.is_a?(String) && latest.match?(/\A\d+(?:\.\d+)+,\d+\z/)
+            abort "Mac version/build/revision metadata unavailable" unless latest.is_a?(String) && latest.match?(/\A\d+(?:\.\d+)+,\d+(?:,\d{8}\.\d+)?\z/)
           ' "$RUNNER_TEMP/klakk-livecheck.json"
