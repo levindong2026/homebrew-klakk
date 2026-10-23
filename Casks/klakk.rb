@@ -1,15 +1,15 @@
 cask "klakk" do
-  version "1.4.1,23"
-  sha256 "23c6b838f4e17e2ccddba1eb91927d0fe714403abcc512fca0545a013f5dfa51"
+  version "1.4.1,23,20261011.1"
+  sha256 "71006389accd8deda13a5a50fcf0ae4263d70a0d9f0bc9f82218906cd313aedc"
 
-  url "https://downloads.tryklakk.com/Klakk-#{version.csv.first}-#{version.csv.second}.dmg"
+  url "https://downloads.tryklakk.com/Klakk-#{version.csv.first}-#{version.csv.second}-r#{version.csv.third}.dmg"
   name "Klakk"
   desc "Keyboard sounds while typing"
   homepage "https://tryklakk.com/en/"
 
   livecheck do
     url "https://github.com/levindong2026/klakk-downloads"
-    regex(/^Klakk-(\d+(?:\.\d+)+)-(\d+)\.dmg$/i)
+    regex(/^Klakk-(\d+(?:\.\d+)+)-(\d+)(?:-r(\d{8}\.\d+))?\.dmg$/i)
     strategy :github_releases do |json, regex|
       json.flat_map do |release|
         next [] if release["draft"] || release["prerelease"]
@@ -20,7 +20,7 @@ cask "klakk" do
           match = asset["name"]&.match(regex)
           next unless match
 
-          "#{match[1]},#{match[2]}"
+          match.captures.compact.join(",")
         end
       end
     end
@@ -28,7 +28,8 @@ cask "klakk" do
 
   depends_on macos: :sonoma
 
-  app "Klakk.app"
+  # Preserve the existing installation path while matching the revised bundle name.
+  app "klakk.app", target: "Klakk.app"
 
   caveats <<~EOS
     Klakk needs Input Monitoring permission to react to keyboard events in other apps.
