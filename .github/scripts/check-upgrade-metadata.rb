@@ -3,7 +3,7 @@
 require "cask/cask_loader"
 require "version"
 
-cask = Cask::CaskLoader.load(Pathname.new("Casks/klakk.rb").expand_path)
+cask = Cask::CaskLoader.load(Pathname.new(ARGV.fetch(0)).expand_path)
 expected = "1.4.1,23,20261011.1"
 raise "Unexpected candidate version" unless cask.version.to_s == expected
 raise "Unexpected revision URL" unless cask.url.to_s ==

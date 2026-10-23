@@ -28,11 +28,11 @@ jobs:
           ruby -c Casks/klakk.rb
           brew style Casks/klakk.rb
           brew ruby .github/scripts/check-release-filter.rb
-          brew ruby .github/scripts/check-upgrade-metadata.rb
           brew tap levindong2026/klakk
           task_tap_root="$(brew --repository levindong2026/klakk)"
           cp Casks/klakk.rb "$task_tap_root/Casks/klakk.rb"
           cmp Casks/klakk.rb "$task_tap_root/Casks/klakk.rb"
+          brew ruby .github/scripts/check-upgrade-metadata.rb "$task_tap_root/Casks/klakk.rb"
           task_livecheck_status=0
           brew livecheck --cask levindong2026/klakk/klakk --json > "$RUNNER_TEMP/klakk-livecheck.json" || task_livecheck_status=$?
           cat "$RUNNER_TEMP/klakk-livecheck.json"
