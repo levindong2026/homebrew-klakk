@@ -18,11 +18,11 @@ brew install --cask levindong2026/klakk/klakk
 
 Use the full tap name for Klakk at tryklakk.com. [Klack at tryklack.com](https://tryklack.com/) is a different application.
 
-Requirements: macOS 14 or later, Apple silicon or Intel. The cask targets [Mac website 1.4.1, build 23, internal revision 2026-10-11.1](https://github.com/levindong2026/klakk-downloads/releases/tag/v1.4.1-r20261011.1), using `Klakk-1.4.1-23-r20261011.1.dmg`. The signed DMG contains the Apple-notarized, stapled Klakk app; the outer DMG was not separately notarized. Homebrew verifies SHA-256 before installation. The app then requests Input Monitoring when you open it; review the [privacy policy](https://tryklakk.com/en/privacy/) before granting permission.
+Requirements: macOS 14 or later, Apple silicon or Intel. The cask targets [Mac website 1.4.2, build 24](https://github.com/levindong2026/klakk-downloads/releases/tag/v1.4.2), using `Klakk-1.4.2-24.dmg`. The signed DMG contains the Apple-notarized, stapled Klakk app; the outer DMG was not separately notarized. Homebrew verifies SHA-256 before installation. The app then requests Input Monitoring when you open it; review the [privacy policy](https://tryklakk.com/en/privacy/) before granting permission.
 
-The trial includes all 14 sound packs and lasts 3 days from first launch. Continued use costs US$4.49 once for the Mac edition, with applicable taxes at checkout. Windows and the Mac App Store are separate purchase channels. This tap downloads the Mac website edition.
+The trial includes all 14 sound packs and lasts 3 days from first launch. Continued use costs US$6.99 once for the Mac edition, with applicable taxes at checkout. Each new Mac website license supports up to three Macs. Windows and the Mac App Store are separate purchase channels. This tap downloads the Mac website edition.
 
-The linked public checks covered the earlier `Klakk-1.4.1-23.dmg` on an Apple silicon Mac with macOS 26 and an Intel Mac with macOS 15. They are not installation validation of the revised package above. They verified installation, bundle version and build, both executable architectures, code signature, stapled notarization ticket, Gatekeeper acceptance and uninstall. They did not open the app, grant keyboard permissions or test physical audio latency. QA operations are not customer downloads or installations.
+The linked public checks covered the earlier `Klakk-1.4.1-23.dmg` on an Apple silicon Mac with macOS 26 and an Intel Mac with macOS 15. Those Homebrew installation checks apply to that earlier package. They verified installation, bundle version and build, both executable architectures, code signature, stapled notarization ticket, Gatekeeper acceptance and uninstall. They did not open the app, grant keyboard permissions or test physical audio latency. QA operations are not customer downloads or installations.
 
 ## Maintenance
 

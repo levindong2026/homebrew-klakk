@@ -1,8 +1,8 @@
 cask "klakk" do
-  version "1.4.1,23,20261011.1"
-  sha256 "71006389accd8deda13a5a50fcf0ae4263d70a0d9f0bc9f82218906cd313aedc"
+  version "1.4.2,24"
+  sha256 "625608969133c6930cbdd3d52082c58104e189f04832b9834dc186e360f0b601"
 
-  url "https://downloads.tryklakk.com/Klakk-#{version.csv.first}-#{version.csv.second}-r#{version.csv.third}.dmg"
+  url "https://downloads.tryklakk.com/Klakk-#{version.csv.first}-#{version.csv.second}.dmg"
   name "Klakk"
   desc "Keyboard sounds while typing"
   homepage "https://tryklakk.com/en/"

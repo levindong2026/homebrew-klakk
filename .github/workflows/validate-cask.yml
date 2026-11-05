@@ -20,6 +20,9 @@ jobs:
       HOMEBREW_NO_AUTO_UPDATE: 1
       EXPECTED_ARCHITECTURE: ${{ matrix.architecture }}
     steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - name: Install and inspect the official notarized app
         shell: bash
         run: |
@@ -28,17 +31,20 @@ jobs:
           brew --version
           brew tap levindong2026/klakk
           task_tap_root="$(brew --repository levindong2026/klakk)"
-          test "$(git -C "$task_tap_root" rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          cp Casks/klakk.rb "$task_tap_root/Casks/klakk.rb"
+          cmp Casks/klakk.rb "$task_tap_root/Casks/klakk.rb"
           ruby -c "$task_tap_root/Casks/klakk.rb"
           brew style "$task_tap_root/Casks/klakk.rb"
+          brew trust --cask levindong2026/klakk/klakk
           task_app_dir="$RUNNER_TEMP/klakk-homebrew-apps"
           mkdir -p "$task_app_dir"
           brew install --cask levindong2026/klakk/klakk --appdir="$task_app_dir"
           task_app="$task_app_dir/Klakk.app"
           test -d "$task_app"
           test "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$task_app/Contents/Info.plist")" = 'com.tingnova.klakkdirect'
-          test "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$task_app/Contents/Info.plist")" = '1.4.1'
-          test "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' "$task_app/Contents/Info.plist")" = '23'
+          test "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$task_app/Contents/Info.plist")" = '1.4.2'
+          test "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' "$task_app/Contents/Info.plist")" = '24'
           test "$(/usr/libexec/PlistBuddy -c 'Print :LSMinimumSystemVersion' "$task_app/Contents/Info.plist")" = '14.0'
           task_executable="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' "$task_app/Contents/Info.plist")"
           lipo "$task_app/Contents/MacOS/$task_executable" -verify_arch x86_64 arm64
