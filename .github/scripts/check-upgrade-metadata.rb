@@ -4,12 +4,13 @@ require "cask/cask_loader"
 require "version"
 
 cask = Cask::CaskLoader.load(Pathname.new(ARGV.fetch(0)).expand_path)
-expected = "1.4.1,23,20261011.1"
+expected = "1.4.2,24"
+previous = "1.4.1,23,20261011.1"
 raise "Unexpected candidate version" unless cask.version.to_s == expected
-raise "Unexpected revision URL" unless cask.url.to_s ==
-                                       "https://downloads.tryklakk.com/Klakk-1.4.1-23-r20261011.1.dmg"
-raise "Unexpected revision checksum" unless cask.sha256.to_s ==
-                                            "71006389accd8deda13a5a50fcf0ae4263d70a0d9f0bc9f82218906cd313aedc"
+expected_url = "https://downloads.tryklakk.com/Klakk-1.4.2-24.dmg"
+raise "Unexpected candidate URL" unless cask.url.to_s == expected_url
+expected_checksum = "625608969133c6930cbdd3d52082c58104e189f04832b9834dc186e360f0b601"
+raise "Unexpected candidate checksum" unless cask.sha256.to_s == expected_checksum
 
 app = cask.artifacts.find { |artifact| artifact.is_a?(Cask::Artifact::App) }
 raise "Expected one app artifact" unless app
@@ -18,12 +19,12 @@ raise "Existing installation target changed" unless app.target.basename.to_s == 
 puts "PASS: revised bundle maps to the existing installation target (metadata only)"
 
 comparisons = {
-  "revision follows original package" => ["1.4.1,23", expected],
-  "later revision follows current" => [expected, "1.4.1,23,20261011.2"],
+  "revision follows original package" => ["1.4.1,23", previous],
+  "later internal revision follows prior revision" => [previous, "1.4.1,23,20261011.2"],
   "multi-digit revision is numerically ordered" => ["1.4.1,23,20261011.2", "1.4.1,23,20261011.10"],
-  "later revision date follows current" => [expected, "1.4.1,23,20261012.1"],
-  "new build outranks internal revision" => [expected, "1.4.1,24"],
-  "new app version outranks internal revision" => [expected, "1.4.2,1"],
+  "later revision date follows prior revision" => [previous, "1.4.1,23,20261012.1"],
+  "new build outranks internal revision" => [previous, "1.4.1,24"],
+  "new app version outranks internal revision" => [previous, expected],
 }
 comparisons.each do |name, (older, newer)|
   raise "#{name}: Homebrew version comparison failed" unless Version.new(older) < Version.new(newer)
@@ -33,6 +34,7 @@ end
 
 {
   "old package receipt is outdated" => ["1.4.1,23", true],
+  "prior revision receipt is outdated" => [previous, true],
   "current package receipt is not outdated" => [expected, false],
   "absent receipt is not an installed upgrade" => [nil, false],
 }.each do |name, (installed, expected_outdated)|
