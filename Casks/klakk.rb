@@ -1,6 +1,6 @@
 cask "klakk" do
-  version "1.4.2,24"
-  sha256 "625608969133c6930cbdd3d52082c58104e189f04832b9834dc186e360f0b601"
+  version "1.4.3,25"
+  sha256 "f5d61c55d4a8992fde0a5bfa3a4ac3ca1fbebbdaf7fc09fde09b9a5f0a8eb8cc"
 
   url "https://downloads.tryklakk.com/Klakk-#{version.csv.first}-#{version.csv.second}.dmg"
   name "Klakk"
@@ -29,7 +29,7 @@ cask "klakk" do
   depends_on macos: :sonoma
 
   # Preserve the existing installation path while matching the revised bundle name.
-  app "klakk.app", target: "Klakk.app"
+  app "Klakk.app", target: "Klakk.app"
 
   caveats <<~EOS
     Klakk needs Input Monitoring permission to react to keyboard events in other apps.

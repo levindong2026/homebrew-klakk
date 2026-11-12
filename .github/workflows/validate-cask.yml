@@ -43,8 +43,8 @@ jobs:
           task_app="$task_app_dir/Klakk.app"
           test -d "$task_app"
           test "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$task_app/Contents/Info.plist")" = 'com.tingnova.klakkdirect'
-          test "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$task_app/Contents/Info.plist")" = '1.4.2'
-          test "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' "$task_app/Contents/Info.plist")" = '24'
+          test "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$task_app/Contents/Info.plist")" = '1.4.3'
+          test "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' "$task_app/Contents/Info.plist")" = '25'
           test "$(/usr/libexec/PlistBuddy -c 'Print :LSMinimumSystemVersion' "$task_app/Contents/Info.plist")" = '14.0'
           task_executable="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' "$task_app/Contents/Info.plist")"
           lipo "$task_app/Contents/MacOS/$task_executable" -verify_arch x86_64 arm64
