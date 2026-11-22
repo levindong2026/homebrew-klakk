@@ -2,7 +2,7 @@
 
 Publisher-maintained installation metadata for [Klakk](https://tryklakk.com/en/), a keyboard sound app for Mac. This is a third-party tap maintained by the Klakk developer. It is not part of the official `homebrew/cask` catalog and does not imply Homebrew endorsement.
 
-Before installing, [preview the 14 included sound packs](https://tryklakk.com/en/keyboard-sounds/?utm_source=github&utm_medium=referral&utm_campaign=homebrew_tap&utm_content=sound_preview) on a computer with a keyboard. The browser preview plays only on that page; use the website trial to judge the sounds while typing in your everyday apps.
+Before installing, [click or tap to preview all 14 included sound packs](https://tryklakk.com/en/keyboard-sounds/?utm_source=github&utm_medium=referral&utm_campaign=homebrew_tap&utm_content=sound_preview#sound-preview-samples). Each sample plays one A-key sound. Use the Mac website edition’s trial to hear the sounds while typing in your everyday apps.
 
 ## Install with Homebrew
 
@@ -35,6 +35,13 @@ brew livecheck --cask levindong2026/klakk/klakk
 ```
 
 The check reads the publisher's recent GitHub releases and matches uploaded Mac DMG names, including the app version, build number and package revision when present. A matching displayed app version and build alone does not establish the same package revision. It excludes draft and prerelease entries, Windows installers and the separately versioned Mac App Store edition. A missing match or failed request is unavailable update information. This check does not install an app or automatically change the cask version or checksum.
+
+If you installed Klakk from this tap, quit the app, refresh Homebrew’s package lists, then upgrade the Klakk cask:
+
+```sh
+brew update
+brew upgrade --cask levindong2026/klakk/klakk
+```
 
 To remove a Homebrew installation:
 
