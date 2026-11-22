@@ -10,6 +10,8 @@ Klakk 1.4.2 (build 24) passed [Homebrew installation checks on GitHub-hosted App
 
 The [Mac installation guide](https://tryklakk.com/en/blog/mac-direct-download-install-guide/?utm_source=github&utm_medium=referral&utm_campaign=homebrew_tap&utm_content=installation_guide) explains the DMG, Homebrew and Mac App Store routes, Input Monitoring and the first sound checks.
 
+See [Homebrew’s macOS requirements](https://docs.brew.sh/Installation#macos-requirements) before installing. Homebrew lists Apple silicon and macOS 15 or later for supported installs. macOS 14 and Intel Macs are unsupported configurations that may still work. If Homebrew is unavailable or fails to install Klakk, choose the signed DMG from the official download page above.
+
 If you already use Homebrew:
 
 ```sh
@@ -18,7 +20,7 @@ brew install --cask levindong2026/klakk/klakk
 
 Use the full tap name for Klakk at tryklakk.com. [Klack at tryklack.com](https://tryklack.com/) is a different application.
 
-Requirements: macOS 14 or later, Apple silicon or Intel. The cask targets [Mac website 1.4.3, build 25](https://github.com/levindong2026/klakk-downloads/releases/tag/v1.4.3), using `Klakk-1.4.3-25.dmg`. The signed, notarized and stapled DMG contains the signed, Apple-notarized and stapled Klakk app. Homebrew verifies SHA-256 before installation. The app then requests Input Monitoring when you open it; review the [privacy policy](https://tryklakk.com/en/privacy/) before granting permission.
+Klakk app requirements: macOS 14 or later, Apple silicon or Intel. The cask targets [Mac website 1.4.3, build 25](https://github.com/levindong2026/klakk-downloads/releases/tag/v1.4.3), using `Klakk-1.4.3-25.dmg`. The signed, notarized and stapled DMG contains the signed, Apple-notarized and stapled Klakk app. Homebrew verifies SHA-256 before installation. The app then requests Input Monitoring when you open it; review the [privacy policy](https://tryklakk.com/en/privacy/) before granting permission.
 
 The trial includes all 14 sound packs and lasts 3 days from first launch. Continued use costs US$6.99 once for the Mac edition, with applicable taxes at checkout. Each new Mac website license supports up to three Macs. Windows and the Mac App Store are separate purchase channels. This tap downloads the Mac website edition. New website purchases use Creem checkout through tryklakk.com; existing Pancake and earlier Creem licenses remain supported.
 
