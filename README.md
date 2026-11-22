@@ -6,7 +6,7 @@ Before installing, [click or tap to preview all 14 included sound packs](https:/
 
 ## Install with Homebrew
 
-Klakk 1.4.2 (build 24) passed [Homebrew installation checks on GitHub-hosted Apple silicon and Intel Mac runners](https://github.com/levindong2026/homebrew-klakk/actions/runs/42089541789). If you prefer a browser download, use the [official download page](https://tryklakk.com/en/download/?utm_source=github&utm_medium=referral&utm_campaign=homebrew_tap).
+Klakk 1.4.3 (build 25) passed [Homebrew installation checks on GitHub-hosted Apple silicon and Intel Mac runners](https://github.com/levindong2026/homebrew-klakk/actions/runs/45024474779). If you prefer a browser download, use the [official download page](https://tryklakk.com/en/download/?utm_source=github&utm_medium=referral&utm_campaign=homebrew_tap).
 
 The [Mac installation guide](https://tryklakk.com/en/blog/mac-direct-download-install-guide/?utm_source=github&utm_medium=referral&utm_campaign=homebrew_tap&utm_content=installation_guide) explains the DMG, Homebrew and Mac App Store routes, Input Monitoring and the first sound checks.
 
@@ -24,7 +24,7 @@ Klakk app requirements: macOS 14 or later, Apple silicon or Intel. The cask targ
 
 The trial includes all 14 sound packs and lasts 3 days from first launch. Continued use costs US$6.99 once for the Mac edition, with applicable taxes at checkout. Each new Mac website license supports up to three Macs. Windows and the Mac App Store are separate purchase channels. This tap downloads the Mac website edition. New website purchases use Creem checkout through tryklakk.com; existing Pancake and earlier Creem licenses remain supported.
 
-The 1.4.2 checks used macOS 26 on Apple silicon and macOS 15 on Intel. They verified installation, bundle version and build, both executable architectures, code signature, the stapled notarization ticket, Gatekeeper acceptance and uninstall. The workflow ends after inspecting and uninstalling the app. To grant Input Monitoring and hear your first sound, follow the Mac installation guide above. The [earlier 1.4.1 run](https://github.com/levindong2026/homebrew-klakk/actions/runs/37712787486) covers the previous package. These are historical package-manager checks; no new Homebrew install or upgrade check for 1.4.3 is claimed. QA operations are not customer downloads or installations.
+The 1.4.3 checks used macOS 26 on Apple silicon and macOS 15 on Intel. They verified a fresh install, bundle version and build, both executable architectures, code signature, the stapled notarization ticket, Gatekeeper acceptance and uninstall. The workflow ends after inspecting and removing the app. To grant Input Monitoring and hear your first sound, follow the Mac installation guide above. The [1.4.2 (build 24) run](https://github.com/levindong2026/homebrew-klakk/actions/runs/42089541789) and [1.4.1 run](https://github.com/levindong2026/homebrew-klakk/actions/runs/37712787486) cover the previous packages. These runs are publisher QA.
 
 ## Maintenance
 
