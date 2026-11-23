@@ -3,7 +3,9 @@
 require "cask/cask_loader"
 require "version"
 
-cask = Cask::CaskLoader.load(Pathname.new(ARGV.fetch(0)).expand_path)
+cask = Cask::CaskLoader.load(ARGV.fetch(0))
+expected_caskfile = Pathname.new(ARGV.fetch(1)).realpath
+raise "Loaded cask does not match the reviewed tap path" unless cask.sourcefile_path&.realpath == expected_caskfile
 expected = "1.4.4,26"
 previous_website = "1.4.3,25"
 previous = "1.4.1,23,20261011.1"
