@@ -15,7 +15,7 @@ cask "klakk" do
 
       mac = json["mac"]
       next unless mac.is_a?(Hash)
-      next unless mac["download_url"] == "https://tryklakk.com/download/klakk.dmg"
+      next if mac["download_url"] != "https://tryklakk.com/download/klakk.dmg"
 
       version = mac["version"]
       build = mac["build"]
