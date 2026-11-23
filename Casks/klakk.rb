@@ -10,15 +10,19 @@ cask "klakk" do
   livecheck do
     url "https://tryklakk.com/api/desktop-release.json"
     strategy :json do |json|
-      next unless json.is_a?(Hash) && json["schema_version"].eql?(1)
+      next unless json.is_a?(Hash)
+      next unless json["schema_version"].eql?(1)
 
       mac = json["mac"]
-      next unless mac.is_a?(Hash) && mac["download_url"] == "https://tryklakk.com/download/klakk.dmg"
+      next unless mac.is_a?(Hash)
+      next unless mac["download_url"] == "https://tryklakk.com/download/klakk.dmg"
 
       version = mac["version"]
       build = mac["build"]
-      next unless version.is_a?(String) && version.match?(/\A[0-9]+(?:\.[0-9]+)+\z/)
-      next unless build.is_a?(Integer) && build.positive?
+      next unless version.is_a?(String)
+      next unless version.match?(/\A[0-9]+(?:\.[0-9]+)+\z/)
+      next unless build.is_a?(Integer)
+      next unless build.positive?
 
       "#{version},#{build}"
     end
