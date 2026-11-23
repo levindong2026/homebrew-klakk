@@ -1,6 +1,6 @@
 cask "klakk" do
-  version "1.4.3,25"
-  sha256 "f5d61c55d4a8992fde0a5bfa3a4ac3ca1fbebbdaf7fc09fde09b9a5f0a8eb8cc"
+  version "1.4.4,26"
+  sha256 "8dc69ccda0687967c93f9ed05ea4fe39db3b4f303308598cdecf9ea0da5d6729"
 
   url "https://downloads.tryklakk.com/Klakk-#{version.csv.first}-#{version.csv.second}.dmg"
   name "Klakk"
@@ -8,21 +8,19 @@ cask "klakk" do
   homepage "https://tryklakk.com/en/"
 
   livecheck do
-    url "https://github.com/levindong2026/klakk-downloads"
-    regex(/^Klakk-(\d+(?:\.\d+)+)-(\d+)(?:-r(\d{8}\.\d+))?\.dmg$/i)
-    strategy :github_releases do |json, regex|
-      json.flat_map do |release|
-        next [] if release["draft"] || release["prerelease"]
+    url "https://tryklakk.com/api/desktop-release.json"
+    strategy :json do |json|
+      next unless json.is_a?(Hash) && json["schema_version"].eql?(1)
 
-        release.fetch("assets", []).filter_map do |asset|
-          next if asset["state"] != "uploaded"
+      mac = json["mac"]
+      next unless mac.is_a?(Hash) && mac["download_url"] == "https://tryklakk.com/download/klakk.dmg"
 
-          match = asset["name"]&.match(regex)
-          next unless match
+      version = mac["version"]
+      build = mac["build"]
+      next unless version.is_a?(String) && version.match?(/\A[0-9]+(?:\.[0-9]+)+\z/)
+      next unless build.is_a?(Integer) && build.positive?
 
-          match.captures.compact.join(",")
-        end
-      end
+      "#{version},#{build}"
     end
   end
 

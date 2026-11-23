@@ -18,10 +18,10 @@ jobs:
       HOMEBREW_NO_ANALYTICS: 1
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - name: Check the candidate cask without installing the application
         shell: bash
-        env:
-          HOMEBREW_GITHUB_API_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           brew --version
@@ -47,5 +47,5 @@ jobs:
             pinned = File.read("Casks/klakk.rb").match(/^\s+version "([^"]+)"$/).captures.first
             abort "Unexpected pinned cask version" unless version["current"] == pinned
             latest = version["latest"]
-            abort "Mac version/build/revision metadata unavailable" unless latest.is_a?(String) && latest.match?(/\A\d+(?:\.\d+)+,\d+(?:,\d{8}\.\d+)?\z/)
+            abort "Mac version/build metadata unavailable" unless latest.is_a?(String) && latest.match?(/\A[0-9]+(?:\.[0-9]+)+,[1-9][0-9]*\z/)
           ' "$RUNNER_TEMP/klakk-livecheck.json"

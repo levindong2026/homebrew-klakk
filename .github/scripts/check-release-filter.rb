@@ -1,16 +1,13 @@
 # Exercise the actual cask strategy block without installing its app artifact.
 class ReleaseCheckCapture
-  attr_reader :matcher
+  attr_reader :matcher, :source_url
 
-  def url(_value); end
-
-  def regex(value = nil)
-    @regex = value if value
-    @regex
+  def url(value)
+    @source_url = value
   end
 
   def strategy(value, &block)
-    raise "Unexpected strategy" unless value == :github_releases
+    raise "Unexpected strategy" unless value == :json
 
     @matcher = block
   end
@@ -43,35 +40,59 @@ context.define_singleton_method(:cask) { |_name, &block| capture.instance_eval(&
 context.instance_eval(File.read("Casks/klakk.rb"), "Casks/klakk.rb")
 check = capture.release_check
 
-def release(name, draft: false, prerelease: false, state: "uploaded")
-  { "draft" => draft, "prerelease" => prerelease,
-    "assets" => [{ "name" => name, "state" => state }] }
+raise "Unexpected metadata URL" unless check.source_url == "https://tryklakk.com/api/desktop-release.json"
+
+OFFICIAL_DMG = "https://tryklakk.com/download/klakk.dmg".freeze
+
+def desktop_feed(version: "1.4.4", build: 26, url: OFFICIAL_DMG)
+  {
+    "schema_version" => 1,
+    "mac" => { "version" => version, "build" => build, "download_url" => url },
+    "windows" => { "version" => "9.9.9", "download_url" => "https://tryklakk.com/download/klakk-windows.exe" },
+  }
 end
 
 cases = {
-  "Mac version includes its build" => [[release("Klakk-1.4.1-23.dmg")], ["1.4.1,23"]],
-  "Windows-only release cannot replace Mac" => [[release("Klakk-9.9.9-Windows-Setup.exe")], []],
-  "draft Mac excluded" => [[release("Klakk-9.9.9-99.dmg", draft: true)], []],
-  "prerelease Mac excluded" => [[release("Klakk-9.9.9-99.dmg", prerelease: true)], []],
-  "unfinished asset excluded" => [[release("Klakk-9.9.9-99.dmg", state: "new")], []],
-  "missing assets do not invent a version" => [[{ "draft" => false, "prerelease" => false }], []],
-  "new build remains distinguishable" => [[release("Klakk-1.4.1-24.dmg")], ["1.4.1,24"]],
-  "internal revision remains distinguishable" => [[release("Klakk-1.4.1-23-r20261011.1.dmg")], ["1.4.1,23,20261011.1"]],
-  "old and current revision can coexist" => [[release("Klakk-1.4.1-23.dmg"), release("Klakk-1.4.1-23-r20261011.1.dmg")], ["1.4.1,23", "1.4.1,23,20261011.1"]],
-  "draft revision excluded" => [[release("Klakk-1.4.1-23-r20261011.1.dmg", draft: true)], []],
-  "prerelease revision excluded" => [[release("Klakk-1.4.1-23-r20261011.1.dmg", prerelease: true)], []],
-  "unfinished revision excluded" => [[release("Klakk-1.4.1-23-r20261011.1.dmg", state: "new")], []],
-  "revision ZIP is not a DMG" => [[release("Klakk-1.4.1-23-r20261011.1.zip")], []],
-  "Windows revision excluded" => [[release("Klakk-1.4.1-Windows-Setup-r20261011.1.exe")], []],
-  "QA prefix excluded" => [[release("QA-Klakk-1.4.1-23-r20261011.1.dmg")], []],
-  "QA suffix excluded" => [[release("Klakk-1.4.1-23-r20261011.1-qa.dmg")], []],
-  "malformed revision excluded" => [[release("Klakk-1.4.1-23-r20261011.dmg")], []],
-  "store artifact excluded" => [[release("Klakk-AppStore-1.3.8-23.dmg")], []],
+  "current website Mac version and build" => [desktop_feed, "1.4.4,26"],
+  "separately newer Windows version is ignored" => [desktop_feed(version: "1.4.3", build: 25), "1.4.3,25"],
+  "new version and build remain distinguishable" => [desktop_feed(version: "10.4.5", build: 31), "10.4.5,31"],
+  "newer build of the same app version" => [desktop_feed(build: 27), "1.4.4,27"],
+  "Windows-only feed cannot supply Mac version" => [desktop_feed.merge("mac" => nil), nil],
+  "Mac absent during publication" => [desktop_feed.reject { |key, _| key == "mac" }, nil],
+  "unknown schema" => [desktop_feed.merge("schema_version" => 2), nil],
+  "schema must be integer" => [desktop_feed.merge("schema_version" => 1.0), nil],
+  "missing schema" => [desktop_feed.reject { |key, _| key == "schema_version" }, nil],
+  "malformed input is unavailable" => [nil, nil],
+  "legacy GitHub asset array is unavailable" => [[{ "assets" => [{ "name" => "Klakk-9.9.9-99.dmg" }] }], nil],
+  "malformed Mac row" => [desktop_feed.merge("mac" => "1.4.4"), nil],
+  "missing Mac version" => [desktop_feed(version: nil), nil],
+  "malformed Mac version" => [desktop_feed(version: "1..4.4"), nil],
+  "prerelease version rejected" => [desktop_feed(version: "1.4.5-beta"), nil],
+  "missing Mac build" => [desktop_feed(build: nil), nil],
+  "build string rejected" => [desktop_feed(build: "26"), nil],
+  "float build rejected" => [desktop_feed(build: 26.0), nil],
+  "negative build rejected" => [desktop_feed(build: -1), nil],
+  "zero build rejected" => [desktop_feed(build: 0), nil],
+  "Mac ZIP excluded" => [desktop_feed(url: "https://tryklakk.com/download/klakk.zip"), nil],
+  "Mac App Store excluded" => [desktop_feed(url: "https://tryklakk.com/appstore/klakk"), nil],
+  "foreign download URL rejected" => [desktop_feed(url: "https://unknown.invalid/download/klakk.dmg"), nil],
+  "HTTP download URL rejected" => [desktop_feed(url: "http://tryklakk.com/download/klakk.dmg"), nil],
+  "QA or draft download path rejected" => [desktop_feed(url: "https://tryklakk.com/download/qa-klakk.dmg"), nil],
+  "query on stable URL rejected" => [desktop_feed(url: "#{OFFICIAL_DMG}?qa=1"), nil],
 }
 
 cases.each do |name, (input, expected)|
-  actual = check.matcher.call(input, check.regex)
+  actual = check.matcher.call(input)
   raise "#{name}: #{actual.inspect} != #{expected.inspect}" unless actual == expected
 
   puts "PASS: #{name}"
+end
+
+if ARGV[0]
+  require "json"
+  website = JSON.parse(File.read(ARGV.fetch(0)))
+  expected = ARGV.fetch(1)
+  raise "Official feed mismatch" unless check.matcher.call(website) == expected
+
+  puts "PASS: recorded first-party website response"
 end

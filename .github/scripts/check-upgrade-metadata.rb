@@ -4,19 +4,20 @@ require "cask/cask_loader"
 require "version"
 
 cask = Cask::CaskLoader.load(Pathname.new(ARGV.fetch(0)).expand_path)
-expected = "1.4.2,24"
+expected = "1.4.4,26"
+previous_website = "1.4.3,25"
 previous = "1.4.1,23,20261011.1"
 raise "Unexpected candidate version" unless cask.version.to_s == expected
-expected_url = "https://downloads.tryklakk.com/Klakk-1.4.2-24.dmg"
+expected_url = "https://downloads.tryklakk.com/Klakk-1.4.4-26.dmg"
 raise "Unexpected candidate URL" unless cask.url.to_s == expected_url
-expected_checksum = "625608969133c6930cbdd3d52082c58104e189f04832b9834dc186e360f0b601"
+expected_checksum = "8dc69ccda0687967c93f9ed05ea4fe39db3b4f303308598cdecf9ea0da5d6729"
 raise "Unexpected candidate checksum" unless cask.sha256.to_s == expected_checksum
 
 app = cask.artifacts.find { |artifact| artifact.is_a?(Cask::Artifact::App) }
 raise "Expected one app artifact" unless app
-raise "Revision bundle name differs" unless app.source.basename.to_s == "klakk.app"
+raise "Unexpected app bundle source" unless app.source.basename.to_s == "Klakk.app"
 raise "Existing installation target changed" unless app.target.basename.to_s == "Klakk.app"
-puts "PASS: revised bundle maps to the existing installation target (metadata only)"
+puts "PASS: current bundle maps to the existing installation target (metadata only)"
 
 comparisons = {
   "revision follows original package" => ["1.4.1,23", previous],
@@ -25,6 +26,7 @@ comparisons = {
   "later revision date follows prior revision" => [previous, "1.4.1,23,20261012.1"],
   "new build outranks internal revision" => [previous, "1.4.1,24"],
   "new app version outranks internal revision" => [previous, expected],
+  "new website build follows 1.4.3" => [previous_website, expected],
 }
 comparisons.each do |name, (older, newer)|
   raise "#{name}: Homebrew version comparison failed" unless Version.new(older) < Version.new(newer)
@@ -35,6 +37,7 @@ end
 {
   "old package receipt is outdated" => ["1.4.1,23", true],
   "prior revision receipt is outdated" => [previous, true],
+  "prior website package receipt is outdated" => [previous_website, true],
   "current package receipt is not outdated" => [expected, false],
   "absent receipt is not an installed upgrade" => [nil, false],
 }.each do |name, (installed, expected_outdated)|

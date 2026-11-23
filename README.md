@@ -6,7 +6,7 @@ Before installing, [click or tap to preview all 14 included sound packs](https:/
 
 ## Install with Homebrew
 
-Klakk 1.4.3 (build 25) passed [Homebrew installation checks on GitHub-hosted Apple silicon and Intel Mac runners](https://github.com/levindong2026/homebrew-klakk/actions/runs/45024474779). If you prefer a browser download, use the [official download page](https://tryklakk.com/en/download/?utm_source=github&utm_medium=referral&utm_campaign=homebrew_tap).
+The earlier Klakk 1.4.3 (build 25) passed [Homebrew installation checks on GitHub-hosted Apple silicon and Intel Mac runners](https://github.com/levindong2026/homebrew-klakk/actions/runs/45024474779). If you prefer a browser download, use the [official download page](https://tryklakk.com/en/download/?utm_source=github&utm_medium=referral&utm_campaign=homebrew_tap).
 
 The [Mac installation guide](https://tryklakk.com/en/blog/mac-direct-download-install-guide/?utm_source=github&utm_medium=referral&utm_campaign=homebrew_tap&utm_content=installation_guide) explains the DMG, Homebrew and Mac App Store routes, Input Monitoring and the first sound checks.
 
@@ -20,7 +20,7 @@ brew install --cask levindong2026/klakk/klakk
 
 Use the full tap name for Klakk at tryklakk.com. [Klack at tryklack.com](https://tryklack.com/) is a different application.
 
-Klakk app requirements: macOS 14 or later, Apple silicon or Intel. The cask targets [Mac website 1.4.3, build 25](https://github.com/levindong2026/klakk-downloads/releases/tag/v1.4.3), using `Klakk-1.4.3-25.dmg`. The signed, notarized and stapled DMG contains the signed, Apple-notarized and stapled Klakk app. Homebrew verifies SHA-256 before installation. The app then requests Input Monitoring when you open it; review the [privacy policy](https://tryklakk.com/en/privacy/) before granting permission.
+Klakk app requirements: macOS 14 or later, Apple silicon or Intel. The cask targets Mac website 1.4.4, build 26, using the official `Klakk-1.4.4-26.dmg`. Its [published checksum and byte count](https://tryklakk.com/en/verify-installer/) identify the cask download. The signed, notarized and stapled DMG contains the signed, Apple-notarized and stapled Klakk app. Homebrew verifies SHA-256 before installation. The app then requests Input Monitoring when you open it; review the [privacy policy](https://tryklakk.com/en/privacy/) before granting permission.
 
 The trial includes all 14 sound packs and lasts 3 days from first launch. Continued use costs US$6.99 once for the Mac edition, with applicable taxes at checkout. Each new Mac website license supports up to three Macs. Windows and the Mac App Store are separate purchase channels. This tap downloads the Mac website edition. New website purchases use Creem checkout through tryklakk.com; existing Pancake and earlier Creem licenses remain supported.
 
@@ -36,7 +36,7 @@ To check the Mac website release metadata:
 brew livecheck --cask levindong2026/klakk/klakk
 ```
 
-The check reads the publisher's recent GitHub releases and matches uploaded Mac DMG names, including the app version, build number and package revision when present. A matching displayed app version and build alone does not establish the same package revision. It excludes draft and prerelease entries, Windows installers and the separately versioned Mac App Store edition. A missing match or failed request is unavailable update information. This check does not install an app or automatically change the cask version or checksum.
+The check reads the [official website release feed](https://tryklakk.com/api/desktop-release.json) for the Mac DMG version and build. A missing Mac record or failed request leaves the update version unavailable. The feed does not report package revisions. The tap pins the exact DMG and SHA-256 separately. Running the check leaves the cask unchanged.
 
 If you installed Klakk from this tap, quit the app, refresh Homebrew’s package lists, then upgrade the Klakk cask:
 
