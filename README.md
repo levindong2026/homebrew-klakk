@@ -10,7 +10,7 @@ Klakk 1.4.4 (build 26) passed [fresh Homebrew install and uninstall checks on Gi
 
 The [Mac installation guide](https://tryklakk.com/en/blog/mac-direct-download-install-guide/?utm_source=github&utm_medium=referral&utm_campaign=homebrew_tap&utm_content=installation_guide) explains the DMG, Homebrew and Mac App Store routes, Input Monitoring and the first sound checks.
 
-See [Homebrew’s macOS requirements](https://docs.brew.sh/Installation#macos-requirements) before installing. Homebrew lists Apple silicon and macOS 15 or later for supported installs. macOS 14 and Intel Macs are unsupported configurations that may still work. If Homebrew is unavailable or fails to install Klakk, choose the signed DMG from the official download page above.
+See [Homebrew’s macOS requirements](https://docs.brew.sh/Installation#macos-requirements) before installing. Homebrew lists Apple silicon and macOS 15 or later for supported installs. macOS 14 and Intel Macs are unsupported configurations that may still work. If Homebrew is unavailable or fails to install Klakk, choose the signed DMG from the official download page above. If the website download does not start, the [direct Mac installation steps](https://tryklakk.com/en/blog/mac-direct-download-install-guide/?utm_source=github&utm_medium=referral&utm_campaign=homebrew_tap&utm_content=installation_guide#set-up-the-direct-download) include the same notarized DMG on GitHub.
 
 If you already use Homebrew:
 
