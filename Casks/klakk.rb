@@ -35,7 +35,9 @@ cask "klakk" do
 
   caveats <<~EOS
     Klakk needs Input Monitoring permission to react to keyboard events in other apps.
-    After installing, open Klakk and follow its permission prompt.
+    After installing, open Klakk from Applications and follow the Input Monitoring prompt.
+    If macOS asks, quit and reopen Klakk after granting permission.
+    For help with setup and the first sound, see https://tryklakk.com/en/download/#first-sound
     The full-featured trial lasts 3 days. Continued use requires a separate Mac license.
     See https://tryklakk.com/en/privacy/ and https://tryklakk.com/en/terms/.
   EOS
